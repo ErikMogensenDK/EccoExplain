@@ -13090,7 +13090,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I've build a small addition to the ecco library (<a href="https://github.com/jalammar/ecco">https://github.com/jalammar/ecco</a>) using openai's api to automatically explain what the clusters found through non-negative matrix factorizations (NNMF) might have in common!
-I thought ecco was a nice library to build the addition to because this project was quite experimental, and the vizualisations of ecco makes it easy to do assess whether the interpretation/summary that the LLM is providing!
+I thought ecco was a nice library to build the addition to because this project was quite experimental, and the vizualisations of ecco makes it easy to assess the quality of the interpretation/summary that the LLM is providing!
 Table of Content:</p>
 <ul>
 <li>Short intro to ECCO</li>
@@ -13122,33 +13122,13 @@ Table of Content:</p>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Some weights of the model checkpoint at distilbert-base-uncased were not used when initializing DistilBertModel: [&#39;vocab_projector.bias&#39;, &#39;vocab_layer_norm.weight&#39;, &#39;vocab_transform.bias&#39;, &#39;vocab_projector.weight&#39;, &#39;vocab_transform.weight&#39;, &#39;vocab_layer_norm.bias&#39;]
-- This IS expected if you are initializing DistilBertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
-- This IS NOT expected if you are initializing DistilBertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Ecco is a library providing interactive visualizations to some well-known large language model analysis methods.
 It has a few pretrained models - and for this project I'll be using the "distilbert-base-uncased" model (<a href="https://huggingface.co/distilbert-base-uncased">https://huggingface.co/distilbert-base-uncased</a>) since I can easily run inference locally, but the .explain() methods works for all the models in ecco.
-Below I've provided an example of the explore method, but Jay Alammar provides more indepth examples here: <a href="https://jalammar.github.io/explaining-transformers/">https://jalammar.github.io/explaining-transformers/</a></p>
+Below I've provided an example of the explore method, but Jay Alammar provides more in depth examples here: <a href="https://jalammar.github.io/explaining-transformers/">https://jalammar.github.io/explaining-transformers/</a></p>
 
 </div>
 </div>
@@ -13254,10 +13234,10 @@ Below I've provided an example of the explore method, but Jay Alammar provides m
 
 
 
-<div id="7c731204-740a-4f6d-9bde-be3ea2da1753"></div>
+<div id="6f7b4216-67d8-4d9f-8d91-fd7743334b3d"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#7c731204-740a-4f6d-9bde-be3ea2da1753');
+var element = $('#6f7b4216-67d8-4d9f-8d91-fd7743334b3d');
 
          requirejs(['basic', 'ecco'], function(basic, ecco){
             const viz_id = basic.init()
@@ -13327,8 +13307,7 @@ I tried using openai's large language models for this - an example can be seen b
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The nnmf provides a value for how much each tokes relates to the each factor - this value is used by ECCO to colour the tokens above.
-I turned the these values into text by masking the original input sequence using the nnmf values, and masking all values under some threshold.
-I experimented with several different methods for finding a good threshold for masking, and 0.01 generally provided reasonable results.</p>
+I essence, instead of colouring the tokens, I turned the these values into text by masking the original input sequence using the nnmf values, and masking all values under a threshold.</p>
 
 </div>
 </div>
@@ -13343,11 +13322,11 @@ I experimented with several different methods for finding a good threshold for m
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The explain method mainly uses 2 techniques to guide/ground the model in making the summaries!
-The first method is known as in-context learning (Dong et, al. 2022) - providing the model with a few examples of what you want it to do (and how to respond if it can't)!
+<p>The explain method mainly uses 2 techniques to guide/ground the model in making the summaries: In context learning and indexing!
+In-context learning (Dong et, al. 2022) is about providing the model with a few examples of what you want it to do (and how to respond if it can't)!
 In the "promp.py" file, I've written the prompt used by the explain method. 
 However, I quickly ran into trouble, since I wanted the model to have examples of different types of input.
-I wanted it to provide appropriate summaries of snippets of code, as well as poems.
+I wanted it to provide appropriate summaries of different types of input! 
 For this reason I quickly ran out of space, since the maximum context-length of the model I was using was 4097!</p>
 
 </div>
@@ -13367,7 +13346,7 @@ I manually analyzed some examples, embedded them using openai's embedding model:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In summary, this is how .explain() (sort of) works - by creating some additional "factual" information that the LLM can use, as well as a way of "choosing" from this pool of specialized knowledge.
+<p>In summary, this is how .explain() works - by creating some additional "factual" information that the LLM can use, as well as a way of "choosing" from this pool of specialized knowledge.
 Using this specialized knowledge in combination with its huge background training - I hoped to automatize a bit of explainability, without having to fine-tune!</p>
 
 </div>
@@ -13524,10 +13503,10 @@ Using this specialized knowledge in combination with its huge background trainin
 
 
 
-<div id="6d6c8e84-c52e-4ca1-8bc3-c486599f515b"></div>
+<div id="abdd5e72-f942-4f37-97aa-685b128c47a6"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#6d6c8e84-c52e-4ca1-8bc3-c486599f515b');
+var element = $('#abdd5e72-f942-4f37-97aa-685b128c47a6');
 
          requirejs(['basic', 'ecco'], function(basic, ecco){
             const viz_id = basic.init()
