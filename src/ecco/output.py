@@ -7,10 +7,12 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+
 from torch.nn import functional as F
 from sklearn import decomposition
 from typing import Dict, Optional, List, Tuple, Union
 from ecco.util import strip_tokenizer_prefix, is_partial_token
+from automatized_explain import Explainer
 
 class OutputSeq:
     """An OutputSeq object is the result of running a language model on some input data. It contains not only the output
@@ -831,7 +833,11 @@ class NMF:
             print(data)
             return data
 
+    def explain(self, masking_threshold = 0.01): 
 
+        explain_instance = Explainer(self.model, masking_threshold)
+        response = explain_instance.analyze()
+        return response
 
     def plot(self, n_components=3):
 
@@ -854,3 +860,5 @@ class NMF:
                        bbox_to_anchor=(1.01, 0.5))
 
             plt.show()
+
+
