@@ -1,6 +1,9 @@
 # EccoExplain
-Addition of .explain() method to Ecco library's non-negative matrix factorization (NNMF) analysis tool.
-By masking the tokens related to factors found using NNMF and feeding these to GPT-3.5, .explain() provides automatic explanations of what clusters of neurons might be responding to.
+Addition of .explain() method to Ecco library's non-negative matrix factorization (NMF) analysis tool.
+By masking the tokens related to factors found using NMF and feeding these to GPT-3.5, .explain() provides automatic explanations of what clusters of neurons might be responding to.
+Openai has recently build automatic explanation of individual neurons: https://openaipublic.blob.core.windows.net/neuron-explainer/paper/index.html.
+This approach does, however, not address polysemanticism of neurons, and this approach also struggles to automatically account for context-related activation (like neurons firing after misspelled words).
+They point to NMF as a potential next step.
 
 You can check out 2 examples of how it works in the "Notebook_to_publish.html" File.
 
