@@ -64,7 +64,33 @@ class Explainer:
 			new_strings.append(new_string)
 			factor_count += 1
 		return new_strings
+	
 
+	def mask_elements_below_threshold(self):
+		masked_array = np.array([[0 if y < self.threshold else y for y in self.components[x]] for x in range(len(self.components))])
+		return masked_array
+
+	def create_masked_token_list(self, masked_activations):
+		list_of_masked_tokens = [self.tokens[x] if masked_activations[x] != 0 else "_" for x in range(self.num_of_tokens)]
+		return list_of_masked_tokens
+
+	def create_masked_token_lists(self, masked_activations):
+		masked_lists = [self.create_masked_token_list(masked_activations[x]) for x in range(len(masked_activations))]
+		return masked_lists
+
+
+	def create_string_result(self, masked_string):
+		result_string =f"""threshold: {self.threshold}
+n_components: {len(self.components)}
+Original input string: {" ".join(self.tokens)}
+Masked string: {" ".join(masked_string)}
+Output: """
+		return result_string
+
+	def create_string_results_list(self, masked_strings_list):
+		#iterate through list and create a string for each masked token
+		result = [self.create_string_result(x) for x in masked_strings_list]
+		return result
 
 	def create_prompt(self, string_result):
 		prompt_for_gpt = prompt_new.prompt_start.strip()

@@ -8,15 +8,16 @@ import tiktoken  # for counting tokens
 from scipy import spatial  # for calculating vector similarities for search
 import pickle
 
-from ecco.prompts import prompt_fs
+from ecco.prompts import prompt_new
 class Searcher:
-	def __init__(self, input_prompt, api_key, pkl_savepath = "C:/Users/erikm/dropbox/explanations.pkl", MAX_TOKENS=3000):
+	def __init__(self, input_prompt, api_key, pkl_savepath = "C:/Users/erikm/dropbox/openai_like_explanations.pkl", MAX_TOKENS=3000):
 		openai.api_key = api_key
 		self.input_prompt = input_prompt
 		#if CSV is preferred, it can be found below:
 		#self.examples_df = pd.read_csv(examples_csv_path)
 		self.MAX_TOKENS = MAX_TOKENS
-		self.prompt_start = prompt_fs.prompt_start.strip()
+		self.prompt_start = prompt_new.prompt_start.strip()
+		self.prompt_end = prompt_new.prompt_end.strip()
 		with open(pkl_savepath, 'rb') as f:
 			self.examples_df = pickle.load(f)
 
@@ -45,7 +46,7 @@ class Searcher:
 	def add_examples_to_prompt(self):
 		explanations = self.get_examples_ranked_by_relatedness()
 		prompt = self.input_prompt
-		current_length = self.num_tokens(prompt) + self.num_tokens(self.prompt_start)
+		current_length = self.num_tokens(prompt) + self.num_tokens(self.prompt_start) + self.num_tokens(self.prompt_end)
 		for i in range(len(explanations)):
 			length_of_string = self.num_tokens(explanations[i])
 			if (current_length + length_of_string) <= self.MAX_TOKENS:
@@ -54,3 +55,5 @@ class Searcher:
 			else:
 				continue
 		return prompt
+
+#class Embedder(self, ):
