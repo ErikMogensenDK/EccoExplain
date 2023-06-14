@@ -8,12 +8,12 @@ import tiktoken  # for counting tokens
 from scipy import spatial  # for calculating vector similarities for search
 import pickle
 
-from ecco.prompts import prompt_new
+from prompts import prompt_new
 class Searcher:
-	def __init__(self, input_prompt, api_key, pkl_savepath = "C:/Users/erikm/dropbox/openai_like_explanations.pkl", MAX_TOKENS=3000):
+	def __init__(self, input_prompt, api_key = 'API_KEY', pkl_savepath = "C:/Users/erikm/dropbox/openai_like_explanations.pkl", MAX_TOKENS=3000):
 		openai.api_key = api_key
 		self.input_prompt = input_prompt
-		#if CSV is preferred, it can be found below:
+		#if CSV is preferred, commented out code is below:
 		#self.examples_df = pd.read_csv(examples_csv_path)
 		self.MAX_TOKENS = MAX_TOKENS
 		self.prompt_start = prompt_new.prompt_start.strip()
@@ -22,7 +22,7 @@ class Searcher:
 			self.examples_df = pickle.load(f)
 
 	def num_tokens(self, text: str) -> int:
-		"""Return the number of tokens in a string."""
+		# encode string in tokens and return length of tokenized string
 		model = "text-davinci-003"  # only matters insofar as it selects which tokenizer to use
 		encoding = tiktoken.encoding_for_model(model)
 		return len(encoding.encode(text))
@@ -32,7 +32,6 @@ class Searcher:
 		query_embedding_response = openai.Embedding.create(
 		    model="text-embedding-ada-002", #OpenAI's best embeddings as of Apr 2023
 		    input=self.input_prompt,
-		    #input = input
 		)
 		query_embedding = query_embedding_response["data"][0]["embedding"]
 		strings_and_relatednesses = [
