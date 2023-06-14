@@ -44,8 +44,6 @@ class Explainer:
 					new_string = new_string + f'{tokens[i]}\t{component[i]}\n'
 			new_string = new_string +'<end>\n'
 
-			#print(new_string)
-
 			new_strings.append(new_string)
 			factor_count += 1
 		return new_strings
