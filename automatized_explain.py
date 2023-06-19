@@ -5,7 +5,7 @@ import pandas as pd
 from embedding_searcher import Searcher
 
 class Explainer:
-	def __init__(self, nmf_object, threshold = 0.01, api_key = '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' , example_csv_save_path = "C:/Users/erikm/dropbox/explanations.csv"):
+	def __init__(self, nmf_object, api_key):
 		openai.api_key = api_key
 		self.api_key = api_key
 		self.components = nmf_object.components 
@@ -44,6 +44,8 @@ class Explainer:
 					new_string = new_string + f'{tokens[i]}\t{component[i]}\n'
 			new_string = new_string +'<end>\n'
 
+			#print(new_string)
+
 			new_strings.append(new_string)
 			factor_count += 1
 		return new_strings
@@ -55,23 +57,21 @@ class Explainer:
 		prompt_for_gpt = prompt_for_gpt + searcher.add_examples_to_prompt()
 		prompt_for_gpt = prompt_for_gpt + string_result
 		prompt_for_gpt = prompt_for_gpt + prompt_new.prompt_end.strip()
-		print(prompt_for_gpt)
 		return prompt_for_gpt
 	
 
 	def get_response(self, prompt):
 		# gets response in text using GPT 3.5 based model text-davinci-003
 		response = (openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=0.7, max_tokens=600))["choices"][0]["text"]
+		#response = 'test_response'
 		return response
 
 	def analyze(self):
-		#result_string_list = self.create_string_results_list(self.create_masked_token_lists(self.mask_elements_below_threshold()))
 		result_string_list = self.create_new_result_string(self.normalize_components(self.components), self.tokens)
 		factor_explanations = []
 		for i in range(len(result_string_list)):
 			prompt = self.create_prompt(result_string_list[i])
 			response = self.get_response(prompt)
-			print(result_string_list[i] + 'Explanation of Factor: the main thing this cluster of neurons does is find' + response)
 			factor_explanations.append(response)
 		return factor_explanations
 

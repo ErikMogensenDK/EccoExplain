@@ -10,7 +10,7 @@ import pickle
 
 from prompts import prompt_new
 class Searcher:
-	def __init__(self, input_prompt, api_key = 'API_KEY', pkl_savepath = "C:/Users/erikm/dropbox/openai_like_explanations.pkl", MAX_TOKENS=3000):
+	def __init__(self, input_prompt, api_key, pkl_savepath = "C:/Users/erikm/dropbox/openai_like_explanations.pkl", MAX_TOKENS=2400):
 		openai.api_key = api_key
 		self.input_prompt = input_prompt
 		#if CSV is preferred, commented out code is below:
